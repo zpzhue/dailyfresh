@@ -1,0 +1,58 @@
+{% extends 'base/base_detail_list.html' %}
+
+{% block title %}天天生鲜-商品搜索结果列表{% endblock title %}
+{% block main-container %}
+    <div class="breadcrumb">
+		<a href="#">全部分类</a>
+		<span>></span>
+		<a href="#">{{ sku.type.name }}</a>
+		<span>></span>
+		<a href="#">商品详情</a>
+	</div>
+
+
+    <div class="main_wrap clearfix">
+
+		<div class="r_wrap fr clearfix">
+			<ul class="goods_type_list clearfix">
+				{% for sku in page %}
+				    <li>
+                        <a href="{% url 'goods:detail' sku.object.id %}"><img src="{{ sku.object.image.url }}"></a>
+                        <h4><a href="{% url 'goods:detail' sku.object.id %}">{{ sku.object.name }}</a></h4>
+                        <div class="operate">
+                            <span class="prize">￥{{ sku.object.price }}</span>
+                            <span class="unit">{{ sku.object.price }}/{{ sku.object.unite }}</span>
+                            <a href="#" class="add_goods" title="加入购物车"></a>
+                        </div>
+                    </li>
+				{% endfor %}
+			</ul>
+
+			<div class="pagenation">
+                {# 上一页标签 #}
+                {% if page.has_previous %}
+                    <a href="/search?q={{ query }}&page={{ page.previous_page_number }}">上一页</a>
+                {% else %}
+                    <a class="disabled" href="javascript:void(0);">上一页</a>
+                {% endif %}
+
+                {# 循环标签页 #}
+                {% for num in paginator.page_range %}
+                    {% if num == page.number %}
+                        <a class="active" href="javascript:void(0);">{{ num }}</a>
+                    {% else %}
+                        <a href="/search?q={{ query }}&page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {# 最后一页 #}
+                {% if page.has_next_page %}
+                    <a href="/search?q={{ query }}&page={{ page.has_next }}">下一页</a>
+                {% else %}
+                    <a class="disabled" href="javascript:void(0);">下一页</a>
+                {% endif %}
+            </div>
+		</div>
+	</div>
+
+{% endblock main-container %}
